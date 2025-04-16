@@ -1,7 +1,8 @@
 package com.coltonSpringApp.crudRestApi.rest;
 
-import com.coltonSpringApp.crudRestApi.dao.EmployeeDAO;
 import com.coltonSpringApp.crudRestApi.entity.Employee;
+import com.coltonSpringApp.crudRestApi.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,16 +13,16 @@ import java.util.List;
 @RequestMapping("/api")
 public class EmployeeRestController {
 
-    private EmployeeDAO employeeDAO;
+    private EmployeeService employeeService;
 
-    // quick initial solution: inject employee DAO directly using constructor injection
-    public EmployeeRestController(EmployeeDAO theEmployeeDao){
-        employeeDAO = theEmployeeDao;
+    @Autowired
+    public EmployeeRestController(EmployeeService theEmployeeService){
+        this.employeeService = theEmployeeService;
     }
 
     // expose "/employees" and return a List of Employees
     @GetMapping("/employees")
     public List<Employee> getAllEmployees(){
-        return employeeDAO.getAllEmployees();
+        return employeeService.getAllEmployees();
     }
 }
