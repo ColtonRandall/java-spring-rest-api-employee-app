@@ -3,9 +3,7 @@ package com.coltonSpringApp.crudRestApi.rest;
 import com.coltonSpringApp.crudRestApi.entity.Employee;
 import com.coltonSpringApp.crudRestApi.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +22,24 @@ public class EmployeeRestController {
     @GetMapping("/employees")
     public List<Employee> getAllEmployees(){
         return employeeService.getAllEmployees();
+    }
+
+    // Get single employee based on index
+    @GetMapping("/employees/{employeeId}")
+    public Employee getEmployeeById(@PathVariable int employeeId){
+
+        Employee employeeToFind = employeeService.getEmployeeById(employeeId);
+
+        if(employeeToFind == null){
+            throw new RuntimeException("Employee id not found for Id: " + employeeId);
+        }
+
+        return employeeToFind;
+    }
+
+    // Create a new employee
+    @PostMapping("/employees")
+    public Employee createNewEmployee(){
+        return null;
     }
 }
