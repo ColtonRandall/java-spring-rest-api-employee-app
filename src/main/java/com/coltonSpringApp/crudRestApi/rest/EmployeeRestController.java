@@ -39,7 +39,11 @@ public class EmployeeRestController {
 
     // Create a new employee
     @PostMapping("/employees")
-    public Employee createNewEmployee(){
-        return null;
+    public Employee updateEmployee(@RequestBody Employee employeeToUpdate){
+
+        // set id to 0 if user passes id in JSON - forces a save instead of an update.
+        employeeToUpdate.setEmployeeId(0);
+
+        return employeeService.save(employeeToUpdate);
     }
 }
