@@ -18,13 +18,11 @@ public class EmployeeRestController {
         this.employeeService = theEmployeeService;
     }
 
-    // expose "/employees" and return a List of Employees
     @GetMapping("/employees")
     public List<Employee> getAllEmployees(){
         return employeeService.getAllEmployees();
     }
 
-    // Get single employee based on index
     @GetMapping("/employees/{employeeId}")
     public Employee getEmployeeById(@PathVariable int employeeId){
 
@@ -37,13 +35,22 @@ public class EmployeeRestController {
         return employeeToFind;
     }
 
-    // Create a new employee
     @PostMapping("/employees")
-    public Employee updateEmployee(@RequestBody Employee employeeToUpdate){
+    public Employee createEmployee(@RequestBody Employee employeeToCreate){
 
         // set id to 0 if user passes id in JSON - forces a save instead of an update.
-        employeeToUpdate.setEmployeeId(0);
+        employeeToCreate.setEmployeeId(0);
 
+        return employeeService.save(employeeToCreate);
+    }
+
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee employeeToUpdate){
         return employeeService.save(employeeToUpdate);
+    }
+
+    @DeleteMapping("/employees/{employeeId}")
+    public void deleteEmployee(@PathVariable int employeeId){
+        employeeService.deleteEmployeeById(employeeId);
     }
 }
