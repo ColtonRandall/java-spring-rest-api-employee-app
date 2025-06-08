@@ -55,8 +55,17 @@ public class EmployeeRestController {
     }
 
     @DeleteMapping("/employees/{employeeId}")
-    public void deleteEmployee(@PathVariable int employeeId){
+    public String deleteEmployee(@PathVariable int employeeId){
+
+        Employee employeeToDelete = employeeService.getEmployeeById(employeeId);
+
+        if (employeeToDelete == null){
+            throw new RuntimeException("Employee ID not found - " + employeeId);
+        }
+
         employeeService.deleteEmployeeById(employeeId);
+
+        return "Deleted employee ID - " + employeeId;
     }
 
     // add mapping for PATCH /employees/{employeeId} - patch employee - partial update
