@@ -1,40 +1,53 @@
 package com.coltonSpringApp.crudRestApi.service;
 
-import com.coltonSpringApp.crudRestApi.dao.EmployeeDAO;
+import com.coltonSpringApp.crudRestApi.dao.EmployeeRepository;
 import com.coltonSpringApp.crudRestApi.entity.Employee;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeDAO employeeDAO;
+    private EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeDAO theEmployeeDAO) {
-        this.employeeDAO = theEmployeeDAO;
+    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository) {
+        this.employeeRepository = theEmployeeRepository;
     }
 
     @Override
     public List<Employee> getAllEmployees() {
-        return employeeDAO.getAllEmployees();
+        return employeeRepository.findAll();
     }
 
     @Override
     public Employee getEmployeeById(int employeeId) {
-        return employeeDAO.getEmployeeById(employeeId);
+
+        // Optional will check for nulls
+        Optional<Employee> result = employeeRepository.findById(employeeId);
+
+        Employee theEmployee = null;
+
+        if (result.isPresent()) {
+            theEmployee = result.get();
+        } else {
+            // no employee exists
+            throw new RuntimeException("Did not find employee id of: " + employeeId);
+        }
+
+        return theEmployee;
     }
 
-    @Transactional
     @Override
     public Employee save(Employee theEmployee) {
-        return employeeDAO.save(theEmployee);
+        return employeeRepository.save(theEmployee);
     }
 
     @Transactional
     @Override
     public void deleteEmployeeById(int employeeId) {
-        employeeDAO.deleteEmployeeById(employeeId);
+        employeeRepository.deleteById(employeeId);
     }
 }
